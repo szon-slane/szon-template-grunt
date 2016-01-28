@@ -3,13 +3,22 @@ module.exports = function(grunt) {
 // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        copy: {
+            fonts: {
+                expand: true,
+                src: 'node_modules/bootstrap/dist/fonts/*',
+                dest: 'fonts/',
+                flatten: true,
+                filter: 'isFile'
+            },
+        },
         concat: {
             css: {
                 src: ['css/bootstrap.css', 'css/style.css'],
                 dest: 'css/concat.css'
             },
             js: {
-                src: ['node_modules/jquery/dist/jquery.js', 'js/js.js'],
+                src: ['node_modules/jquery/dist/jquery.js', 'node_modules/bootstrap/dist/js/bootstrap.js', 'js/js.js'],
                 dest: 'js/concat.js'
             }
         },
@@ -62,6 +71,7 @@ module.exports = function(grunt) {
     });
 
     // Load the plugins.
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -70,5 +80,6 @@ module.exports = function(grunt) {
 
     // The default task.
     grunt.registerTask('default', ['watch']);
+    grunt.registerTask('build', ['less','concat:css','cssmin','concat:js','uglify','copy']);
 
 };
